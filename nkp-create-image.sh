@@ -55,8 +55,8 @@ else
 fi
 
 $bundlepath/cli/nkp create image nutanix $OSCHOSEN \
-    --endpoint https://$NUTANIX_ENDPOINT \
+    --endpoint $NUTANIX_ENDPOINT \
     --insecure \
     --subnet $NUTANIX_SUBNET_NAME \
     --cluster $NUTANIX_PRISM_ELEMENT_CLUSTER_NAME \
-    ${KONVOYIMAGES:+--bundle "$KONVOYIMAGES"} \
+    ${KONVOYIMAGES:+--bundle "$KONVOYIMAGES"}

@@ -109,6 +109,7 @@ $bundlepath/cli/nkp create cluster nutanix -c $CLUSTER_NAME \
     ${BUNDLECHECK:+--bundle "$KONVOYIMAGES,$KOMMANDERIMAGES"} \
     ${SKIP_PREFLIGHT_CHECKS:+--skip-preflight-checks "$SKIP_PREFLIGHT_CHECKS"} \
     ${NTPSERVERS:+--ntp-servers "$NTPSERVERS"} \
+    ${DEPLOYTIMEOUT:+--timeout "$DEPLOYTIMEOUT"} \
     --kubernetes-pod-network-cidr ${POD_CIDR} \
     --kubernetes-service-cidr ${SERVICE_CIDR} \
     --self-managed --airgapped
