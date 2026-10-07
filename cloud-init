@@ -25,16 +25,24 @@ runcmd:
 - rm -f /etc/profile.d/tmout.sh
 - dnf -y install dnf-plugins-core
 - dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-- dnf -y install docker-ce docker-ce-cli containerd.io docker-compose-plugin git tmux wget
+- sed -i 's/\$releasever/9/g' /etc/yum.repos.d/docker-ce.repo
+- dnf -y install --allowerasing docker-ce docker-ce-cli containerd.io docker-compose-plugin git tmux wget
 - systemctl --now enable docker
 - usermod -aG docker nutanix
-- 'curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl'
-- chmod +x ./kubectl
-- mv ./kubectl /usr/local/bin/kubectl
-- 'curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash'
+- chmod o+x /home/nutanix
+- su - nutanix -c "git clone https://github.com/paulzh9/nkp-quickstart.git ~/nkp-quickstart"
+- chmod o+x /home/nutanix/nkp-quickstart
+- 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+- install -m 0755 kubectl /usr/local/bin/kubectl
+- rm -f kubectl
+- 'curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash'
 - systemctl restart sshd
-- eject
-- 'wall "If you are seeing this message, please reconnect your SSH session. Otherwise, the NKP CLI installation process may fail."'
-- reboot
+- eject || true
 
-final_message: "The machine is ready after $UPTIME seconds. Go ahead and install the NKP CLI using: /home/nutanix/nkp-quickstart/scripts/get-nkp-cli.sh"
+power_state:
+  mode: reboot
+  message: "Setup finished, rebooting"
+  timeout: 30
+  condition: true
+
+final_message: "The machine is ready after $UPTIME seconds. Docker, kubectl and helm are installed."
